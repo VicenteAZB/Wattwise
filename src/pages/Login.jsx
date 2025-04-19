@@ -9,7 +9,7 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email === 'gaston@uct.cl' && password === '1234') {
+    if (email === '' || password === '') {
       localStorage.setItem('usuario', JSON.stringify({ nombre: 'Gastón Contreras' }));
       navigate('/oficinas'); 
     } else {
