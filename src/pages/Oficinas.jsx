@@ -14,24 +14,47 @@ export default function Oficinas() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Selecciona una oficina</h2>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{
+      padding: '2rem',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      minHeight: '100vh',
+      backgroundColor: '#f8f9fa'
+    }}>
+      <h2 style={{ marginBottom: '2rem' }}>🏢 Selecciona una Oficina</h2>
+
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+        gap: '1.5rem',
+        width: '100%',
+        maxWidth: '800px'
+      }}>
         {oficinas.map((oficina) => (
           <div
             key={oficina.id}
             onClick={() => handleSelectOficina(oficina.id)}
             style={{
-              margin: '1rem 0',
-              padding: '1rem',
-              background: '#f0f0f0',
+              padding: '1.5rem',
+              backgroundColor: 'white',
+              borderRadius: '12px',
               cursor: 'pointer',
-              borderRadius: '8px',
-              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-              transition: 'background 0.3s'
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+              textAlign: 'center',
+              transition: 'transform 0.2s, background-color 0.3s'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.03)';
+              e.currentTarget.style.backgroundColor = '#e9f5ff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.backgroundColor = 'white';
             }}
           >
-            <h3>{oficina.nombre}</h3>
+            <h3 style={{ margin: 0 }}>{oficina.nombre}</h3>
+            <p style={{ color: '#666', fontSize: '0.9rem' }}>Haz clic para ingresar</p>
           </div>
         ))}
       </div>

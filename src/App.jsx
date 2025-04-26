@@ -49,7 +49,7 @@ function App() {
         />
 
         <Route 
-          path="/oficina/:oficinaId/sensor/:tipo/graficos" 
+          path="/oficina/:oficinaId/sensor/:tipo/graficos/:categoria" 
           element={
             <ProtectedRoute>
               <SeleccionarGrafico /> 

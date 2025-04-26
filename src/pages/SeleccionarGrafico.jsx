@@ -1,52 +1,64 @@
 import { useParams, useNavigate } from 'react-router-dom';
 
 export default function SeleccionarGrafico() {
-  const { tipo, oficinaId } = useParams();
+  const { tipo, oficinaId, categoria } = useParams();
   const navigate = useNavigate();
 
-  const manejarSeleccion = (categoria, grafico, tipoSensor, oficinaId) => {
+  const manejarSeleccion = (grafico) => {
     const currentConfig = JSON.parse(localStorage.getItem(`configGraficoSensor_${oficinaId}`)) || {};
-
-    // Asegurar que el tipoSensor ya tenga un objeto
-    currentConfig[tipoSensor] = currentConfig[tipoSensor] || {};
-
-    // Guardar el gráfico según la categoría (tiempo-real o historico)
-    currentConfig[tipoSensor][categoria] = grafico;
-
+    currentConfig[tipo] = currentConfig[tipo] || {};
+    currentConfig[tipo][categoria] = grafico;
     localStorage.setItem(`configGraficoSensor_${oficinaId}`, JSON.stringify(currentConfig));
-
-    // Navegación según tipo de gráfico
-    if (categoria === 'historico') {
-      navigate(`/oficina/${oficinaId}/sensor/${tipoSensor}/historico`);
-    } else {
-      navigate(`/oficina/${oficinaId}`);
-    }
+    alert('Gráfico actualizado correctamente');
+    navigate(-1);
   };
+
+  const opcionesTiempoReal = [
+    { nombre: '🔄 Tarjeta', valor: 'tarjeta' },
+    { nombre: '📈 Línea en vivo', valor: 'línea en vivo' },
+    { nombre: '📊 Barra dinámica', valor: 'barra dinámica' }
+  ];
+
+  const opcionesHistorico = [
+    { nombre: '🔢 Tabla', valor: 'tabla' },
+    { nombre: '📉 Línea histórica', valor: 'línea histórica' },
+    { nombre: '📋 Área acumulada', valor: 'área acumulada' }
+  ];
+
+  const opciones = categoria === 'tiempo-real' ? opcionesTiempoReal : opcionesHistorico;
+
+  const configActual = JSON.parse(localStorage.getItem(`configGraficoSensor_${oficinaId}`)) || {};
+  const graficoSeleccionado = configActual[tipo]?.[categoria] || '';
 
   return (
     <div style={{ padding: '2rem' }}>
-      <h2>Seleccionar tipo de gráfico para sensor: {tipo}</h2>
+      <button onClick={() => navigate(-1)} style={{ marginBottom: '1rem' }}>🔙 Volver</button>
+      <h2>Gráficos para sensor: {tipo}</h2>
       <p><strong>Oficina:</strong> Oficina {oficinaId}</p>
 
       <div style={{ marginTop: '2rem' }}>
-        <h3>📡 Tiempo real</h3>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <button onClick={() => manejarSeleccion('tiempo-real', 'tarjeta', tipo, oficinaId)}>🔄 Tarjeta</button>
-          <button onClick={() => manejarSeleccion('tiempo-real', 'línea en vivo', tipo, oficinaId)}>📈 Línea en vivo</button>
-          <button onClick={() => manejarSeleccion('tiempo-real', 'barra dinámica', tipo, oficinaId)}>📊 Barra dinámica</button>
+        <h3>Selecciona Gráfico Para {categoria === 'tiempo-real' ? 'Datos en Tiempo Real 📡' : 'Datos Históricos 🕓'}</h3>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          {opciones.map((opcion) => (
+            <button
+              key={opcion.valor}
+              onClick={() => manejarSeleccion(opcion.valor)}
+              style={{
+                padding: '0.6rem 0.75rem',
+                fontSize: '1rem',
+                borderRadius: '6px',
+                border: 'none',
+                cursor: 'pointer',
+                backgroundColor: opcion.valor === graficoSeleccionado ? '#007BFF' : '#f0f0f0',
+                color: opcion.valor === graficoSeleccionado ? 'white' : 'black',
+                boxShadow: opcion.valor === graficoSeleccionado ? '0 2px 8px rgba(0, 123, 255, 0.4)' : '0 1px 3px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.2s'
+              }}
+            >
+              {opcion.nombre}
+            </button>
+          ))}
         </div>
-      </div>
-
-      <div style={{ marginTop: '2rem' }}>
-        <h3>🕓 Datos pasados</h3>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <button onClick={() => manejarSeleccion('historico', 'línea histórica', tipo, oficinaId)}>📉 Línea histórica</button>
-          <button onClick={() => manejarSeleccion('historico', 'área acumulada', tipo, oficinaId)}>📋 Área acumulada</button>
-        </div>
-      </div>
-
-      <div style={{ marginTop: '2rem' }}>
-        <button onClick={() => navigate(-1)}>🔙 Volver</button>
       </div>
     </div>
   );

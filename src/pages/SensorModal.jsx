@@ -26,10 +26,10 @@ export default function SensorModal({ oficinaId, sensor, onClose }) {
 
         {/* Opciones del modal */}
         <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <button onClick={() => navigate(`/oficina/${oficinaId}/sensor/${sensor.tipo}/graficos`)}>📈 Cambiar gráfico</button>
+            <button onClick={() => navigate(`/oficina/${oficinaId}/sensor/${sensor.tipo}/graficos/tiempo-real`)}>📈 Cambiar gráfico</button>
             <button onClick={() => navigate(`/oficina/${oficinaId}/sensor/${sensor.tipo}/historico`)}>📅 Ver datos pasados</button>
             <button onClick={() => navigate(`/oficina/${oficinaId}/sensor/${sensor.tipo}/dispositivos`)}>🖥️ Ver dispositivos vinculados</button>
-            <button onClick={() => navigate(`/oficina/${oficinaId}/sensor/${sensor.tipo}/alertas`)}>📛 Ver alertas programadas</button>
+            <button onClick={() => navigate(`/oficina/${oficinaId}/sensor/${sensor.tipo}/alertas`)}>📢 Ver y/o agregar alertas programadas</button>
         </div>
         {/* Cerrar modal */}
         <button onClick={onClose} style={{ marginTop: '1rem' }}>❌ Cerrar</button>

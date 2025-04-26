@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
   LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip,
@@ -14,6 +14,7 @@ const datosOficinas = [
     sensores: [
       { tipo: 'Energía', unidad: 'kWh' },
       { tipo: 'Temperatura', unidad: '°C' },
+      { tipo: 'Humedad', unidad: '%' }
     ]
   },
   {
@@ -36,6 +37,7 @@ const datosOficinas = [
 
 export default function OficinaDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const oficina = datosOficinas.find((o) => o.id === id);
 
   const [sensores, setSensores] = useState([]);
@@ -135,9 +137,12 @@ export default function OficinaDetail() {
 
   return (
     <div style={{ padding: '2rem' }}>
+      <button onClick={() => navigate(-1)} style={{ marginTop: '1rem' }}>
+        🔙 Volver
+      </button>
       <h2>{oficina.nombre}</h2>
       <h3>Datos Sensores Tiempo Real:</h3>
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'space-between' }}>
         {sensores.map((sensor, index) => (
           <div
             key={index}
@@ -148,13 +153,22 @@ export default function OficinaDetail() {
               background: '#f9f9f9',
               cursor: 'pointer',
               textAlign: 'center',
-              width: '100%',
+              width: '28%',
+              transition: 'transform 0.2s, background-color 0.3s'
             }}
             onClick={() => setSensorSeleccionado(sensor)}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.03)';
+              e.currentTarget.style.backgroundColor = '#e9f5ff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.backgroundColor = 'white';
+            }}
           >
             <h4>{sensor.tipo}</h4>
             {/* Mostrar tarjeta si no hay gráfico configurado o si es "tarjetas" */}
-            {graficoSeleccionado?.[sensor.tipo]?.grafico === 'tarjeta' || !graficoSeleccionado?.[sensor.tipo]
+            {!graficoSeleccionado?.[sensor.tipo]?.['tiempo-real'] || graficoSeleccionado?.[sensor.tipo]?.['tiempo-real'] === 'tarjeta'
               ? <p><strong>Valor:</strong> {sensor.valor} {sensor.unidad}</p>
               : renderGrafico(sensor.tipo)
             }
