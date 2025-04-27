@@ -1,3 +1,24 @@
-# Wattwise
+# PMN - Proyecto Wattwise
 
-En este repositorio se encuentra el PMN del proyecto Wattwise. Cabe destacar que los datos que aparecen en el PMN son simulados. En este PMN se puede observar claramente las interacciones entre las diferentes pantallas y además se simularon las funcionalidades de tal manera para que el usuario comprenda como será la aplicación (por el lado del usuario) en la realidad.
+Este repositorio contiene el **PMN (Producto Mínimo Navegable)** del proyecto **Wattwise**. El propósito de este prototipo es simular la experiencia de usuario, mostrando las interacciones entre las pantallas y las funcionalidades clave de la aplicación, permitiendo comprender cómo se verá la aplicación en el futuro.
+
+> ⚡ **Nota Importante:** Los datos mostrados en el PMN son **simulados** y no representan datos reales. Están diseñados para ilustrar el flujo de la aplicación desde la perspectiva del usuario.
+
+## Características
+
+- **Interacciones simuladas:** Navegación entre pantallas con flujo de usuario simulado.
+- **Funcionalidades demostrativas:** Simulación de las funciones clave que el usuario podrá utilizar en la aplicación real.
+- **Interfaz de usuario clara:** Diseño enfocado en mostrar cómo el usuario interactuará con el sistema.
+
+## Estado del Proyecto
+
+- ✅ PMN completo
+- 🚧 **No está conectado a bases de datos reales ni a servicios externos.**
+
+## Tecnologías Usadas
+
+- **React**: Para el desarrollo del frontend.
+- **React Router**: Para la navegación entre las diferentes pantallas.
+- **React Calendar** y **React Time Picker**: Para seleccionar fechas y horas en la interfaz.
+- **Recharts**: Para representar gráficos simulados de datos.
+
