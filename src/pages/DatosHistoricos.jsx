@@ -51,7 +51,7 @@ export default function DatosHistoricos() {
     });
 
     if (desde >= hasta) {
-      setErrorRango('La fecha y hora "desde" debe ser menor que "hasta".');
+      setErrorRango('La fecha y hora "desde" debe ser menor o igual que la fecha y hora "hasta".');
       return;
     }
 
@@ -164,36 +164,72 @@ export default function DatosHistoricos() {
       <div style={{ display: 'flex', justifyContent: 'center', gap: '4rem', flexWrap: 'wrap' }}>
         <div style={{ textAlign: 'center' }}>
           <label><strong>Desde:</strong></label><br />
-          <Calendar value={fechaDesde} onChange={setFechaDesde} />
-          <TimePicker value={horaDesde} onChange={setHoraDesde} disableClock />
+          <Calendar
+            value={fechaDesde}
+            maxDate={new Date()}  // 👉 Solo deja seleccionar hasta hoy
+            onChange={(value) => {
+              setFechaDesde(value);
+              if (errorRango) setErrorRango('');
+            }}
+          />
+
+          <TimePicker
+            value={horaDesde}
+            onChange={(value) => {
+              setHoraDesde(value);
+              if (errorRango) setErrorRango('');
+            }}
+            disableClock
+          />
         </div>
 
         <div style={{ textAlign: 'center' }}>
           <label><strong>Hasta:</strong></label><br />
-          <Calendar value={fechaHasta} onChange={setFechaHasta} />
-          <TimePicker value={horaHasta} onChange={setHoraHasta} disableClock />
+          <Calendar
+            value={fechaHasta}
+            maxDate={new Date()}  // 👉 Solo deja seleccionar hasta hoy
+            onChange={(value) => {
+              setFechaHasta(value);
+              if (errorRango) setErrorRango('');
+            }}
+          />
+
+          <TimePicker
+            value={horaHasta}
+            onChange={(value) => {
+              setHoraHasta(value);
+              if (errorRango) setErrorRango('');
+            }}
+            disableClock
+          />
         </div>
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+      <div style={{ textAlign: 'center', marginTop: '1rem', marginBottom: '2rem' }}>
         <button onClick={generarDatos} style={{ padding: '0.6rem 1.2rem', fontSize: '1rem' }}>
           📊 Mostrar datos
         </button>
       </div>
 
-      <div style={{ marginTop: '1rem', alignItems: 'center', textAlign: 'center'}}>
-          <button onClick={() => navigate(`/oficina/${oficinaId}/sensor/${tipo}/graficos/historico`)} style={{ padding: '0.6rem 0.75rem', fontSize: '1rem' }}>📈 Cambiar gráfico</button>
+      {errorRango && (
+        <p style={{ color: 'red', textAlign: 'center', marginBottom: '2rem' }}>{errorRango}</p>
+      )}
+
+      <div style={{ marginTop: '1rem', alignItems: 'center', textAlign: 'right'}}>
+          <button onClick={() => navigate(`/oficina/${oficinaId}/sensor/${tipo}/graficos/historico`)} style={{ padding: '0.2rem 0.3rem', fontSize: '0.75rem' }}>📈 Cambiar gráfico para datos históricos</button>
        </div>
 
-       {errorRango && (
-        <p style={{ color: 'red', marginTop: '1rem', textAlign: 'center', marginBottom: '2rem' }}>{errorRango}</p>
-      )}
-
-      {mostrarGrafico && (
-        <ResponsiveContainer width="100%" height={350}>
-          {renderGrafico()}
-        </ResponsiveContainer>
-      )}
+        {mostrarGrafico && (
+          datosSimulados.length > 0 ? (
+            <ResponsiveContainer width="100%" height={350}>
+              {renderGrafico()}
+            </ResponsiveContainer>
+          ) : (
+            <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '1.2rem', color: '#555' }}>
+              No hay datos para mostrar.
+            </div>
+          )
+        )}
     </div>
   );
 }

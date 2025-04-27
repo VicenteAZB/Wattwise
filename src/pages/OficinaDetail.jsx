@@ -59,16 +59,22 @@ export default function OficinaDetail() {
         valor: generarValorAleatorio(s.tipo),
       }));
       setSensores(sensoresIniciales);
-
+  
+      // AGREGAR DATO INICIAL INMEDIATAMENTE
+      const now = new Date();
+      setDatosGrafico([{
+        time: now.toLocaleTimeString(),
+        ...Object.fromEntries(sensoresIniciales.map((s) => [s.tipo, parseFloat(s.valor)])),
+      }]);
+  
       const interval = setInterval(() => {
         const nuevosSensores = sensoresIniciales.map((sensor) => {
           const nuevoValor = generarValorAleatorio(sensor.tipo);
           return { ...sensor, valor: nuevoValor };
         });
-
+  
         setSensores(nuevosSensores);
-
-        // Agregar un nuevo punto de datos al gráfico
+  
         setDatosGrafico((prev) => {
           const now = new Date();
           return [
@@ -79,12 +85,13 @@ export default function OficinaDetail() {
             }
           ];
         });
-
+  
       }, 1000);
-
+  
       return () => clearInterval(interval);
     }
   }, [oficina]);
+  
 
   function generarValorAleatorio(tipo) {
     switch (tipo) {

@@ -20,9 +20,13 @@ export default function Perfil() {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('usuario');
-    navigate('/');
+    const confirmacion = window.confirm('¿Estás seguro de que deseas cerrar sesión?');
+    if (confirmacion) {
+      localStorage.removeItem('usuario');
+      navigate('/');
+    }
   };
+  
 
   if (!usuario) {
     return <div style={{ padding: '2rem', textAlign: 'center' }}>Cargando perfil...</div>;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
@@ -7,19 +7,21 @@ export default function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    alert("Para acceder utilice las siguientes credenciales:\nEmail: gaston@uct.cl\nContraseña: 1234");
+  }, []);
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (email.trim() === '' || password.trim() === '') {
-      setError('Por favor, completa todos los campos');
-      return;
+    if (email === 'gaston@uct.cl' && password === '1234') {
+      localStorage.setItem('usuario', JSON.stringify({ nombre: 'Gastón Contreras', correo: email }));
+      alert('¡Inicio de sesión exitoso!');
+      navigate('/oficinas');
+    } else {
+      setError('Credenciales incorrectas');
     }
-
-    localStorage.setItem('usuario', JSON.stringify({ nombre: 'Gastón Contreras', correo: email }));
-    alert('¡Inicio de sesión exitoso!');
-    navigate('/oficinas');
   };
-
+  
   return (
     <div style={{
       display: 'flex',
@@ -49,7 +51,10 @@ export default function Login() {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (error) setError('');
+            }}
             required
             style={{
               width: '100%',
@@ -66,7 +71,10 @@ export default function Login() {
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              if (error) setError('');
+            }}
             required
             style={{
               width: '100%',
