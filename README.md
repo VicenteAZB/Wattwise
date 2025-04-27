@@ -1,6 +1,6 @@
 # PMN - Proyecto Wattwise
 
-Este repositorio contiene el **PMN (Producto Mínimo Navegable)** del proyecto **Wattwise**, proyecto diseñado para ayudar a las empresas a optimizar su consumo de energía y monitorear en tiempo real el uso de recursos eléctricos.. El propósito de este prototipo es simular la experiencia de usuario, mostrando las interacciones entre las pantallas y las funcionalidades clave de la aplicación, permitiendo comprender cómo se verá la aplicación en el futuro.
+Este repositorio contiene el **PMN (Prototipo Mínimo Navegable)** del proyecto **Wattwise**, proyecto diseñado para ayudar a las empresas a optimizar su consumo de energía y monitorear en tiempo real el uso de recursos eléctricos.. El propósito de este prototipo es simular la experiencia de usuario, mostrando las interacciones entre las pantallas y las funcionalidades clave de la aplicación, permitiendo comprender cómo se verá la aplicación en el futuro.
 
 > ⚡ **Nota Importante:** Los datos mostrados en el PMN son **simulados** y no representan datos reales. Están diseñados para ilustrar el flujo de la aplicación desde la perspectiva del usuario.
 > 
