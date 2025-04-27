@@ -10,11 +10,6 @@ Este repositorio contiene el **PMN (Producto Mínimo Navegable)** del proyecto *
 - **Funcionalidades demostrativas:** Simulación de las funciones clave que el usuario podrá utilizar en la aplicación real.
 - **Interfaz de usuario clara:** Diseño enfocado en mostrar cómo el usuario interactuará con el sistema.
 
-## Estado del Proyecto
-
-- ✅ PMN completo
-- 🚧 **No está conectado a bases de datos reales ni a servicios externos.**
-
 ## Tecnologías Usadas
 
 - **React**: Para el desarrollo del frontend.
