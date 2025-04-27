@@ -17,3 +17,9 @@ Este repositorio contiene el **PMN (Producto Mínimo Navegable)** del proyecto *
 - **React Calendar** y **React Time Picker**: Para seleccionar fechas y horas en la interfaz.
 - **Recharts**: Para representar gráficos simulados de datos.
 
+## Instalación
+
+Para clonar el repositorio y empezar a trabajar con el proyecto:
+
+```bash
+git clone https://github.com/VicenteAZB/wattwise.git
