@@ -18,7 +18,7 @@ export async function obtenerDatosHistoricos({ tipo, oficinaId, fechaDesde, hora
   }
 
   try {
-    const response = await axios.get(`http://localhost:5000/datoshistoricos`, {
+    const response = await axios.get(`https://wattwise-backend.onrender.com/datoshistoricos`, {
       params: {
         tipo,
         oficina: oficinaId,

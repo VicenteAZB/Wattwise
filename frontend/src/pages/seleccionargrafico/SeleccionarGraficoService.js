@@ -6,7 +6,7 @@ export async function actualizarGraficoSeleccionado({ oficinaId, tipo, categoria
 
   try {
     const response = await axios.patch(
-      `http://localhost:5000/oficina/${oficinaId}/sensor/${tipo}/cambiargrafico`,
+      `https://wattwise-backend.onrender.com/oficina/${oficinaId}/sensor/${tipo}/cambiargrafico`,
       payload,
       {
         headers: {
@@ -29,7 +29,7 @@ export async function obtenerGraficoSeleccionado({ oficinaId, tipo, categoria, t
   
   try {
     const response = await axios.get(
-      `http://localhost:5000/oficina/${oficinaId}/sensor/${tipo}/grafico`,
+      `https://wattwise-backend.onrender.com/oficina/${oficinaId}/sensor/${tipo}/grafico`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

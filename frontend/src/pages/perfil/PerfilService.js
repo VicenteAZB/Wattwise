@@ -1,6 +1,6 @@
 export const getUserProfile = async (token) => {
   try {
-    const response = await fetch('http://localhost:5000/perfil', {
+    const response = await fetch('https://wattwise-backend.onrender.com/perfil', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,

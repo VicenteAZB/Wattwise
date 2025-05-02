@@ -1,5 +1,5 @@
 export const getUserOffices = async (token) => {
-  const res = await fetch('http://localhost:5000/oficinas', {
+  const res = await fetch('https://wattwise-backend.onrender.com/oficinas', {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
