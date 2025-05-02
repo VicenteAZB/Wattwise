@@ -297,6 +297,10 @@ def crear_sensor():
         'sensor': sensor_db
     }), 201
 
+@app.route("/", methods=["GET"])
+def index():
+    return "Backend WattWise activo", 200
+
 # Iniciar la aplicación Flask
 if __name__ == '__main__':
     app.run(debug=True)
