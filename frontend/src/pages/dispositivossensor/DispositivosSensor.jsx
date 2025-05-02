@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import './DispositivosSensor.css';
 
 export default function DispositivosSensor() {
   const { tipo, oficinaId } = useParams();
@@ -41,14 +42,14 @@ export default function DispositivosSensor() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <button onClick={() => navigate(-1)} style={{ marginBottom: '1rem' }}>🔙 Volver</button>
+    <div className="dispositivos-contenedor">
+      <button onClick={() => navigate(-1)} className="btn-volver">🔙 Volver</button>
       <h2>Dispositivos vinculados al sensor: {tipo}</h2>
       <p><strong>Oficina:</strong> Oficina {oficinaId}</p>
 
-      <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem', flexWrap: 'wrap' }}>
+      <div className="dispositivos-listado">
         {dispositivos.map((nombre) => (
-          <div key={nombre} style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: '10px', width: '200px' }}>
+          <div key={nombre} className="dispositivo-card">
             <h4>{nombre}</h4>
             <p>Estado: <strong>{estados[nombre] ? 'Encendido' : 'Apagado'}</strong></p>
             <button onClick={() => toggleEstado(nombre)}>

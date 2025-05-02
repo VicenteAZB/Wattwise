@@ -1,0 +1,44 @@
+.seleccionar-grafico-container {
+    padding: 2rem;
+  }
+  
+  .volver-btn {
+    margin-bottom: 1rem;
+  }
+  
+  .opciones-container {
+    margin-top: 2rem;
+  }
+  
+  .opciones-buttons-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .opcion-btn {
+    padding: 0.6rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    color: black;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+  
+  .opcion-btn.selected {
+    background-color: #007BFF;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.4);
+  }
+  
+  .opcion-btn.hovered {
+    background-color: #e0e0e0;
+  }
+  
+  .opcion-btn.clicked {
+    transform: scale(0.95);
+  }
+  

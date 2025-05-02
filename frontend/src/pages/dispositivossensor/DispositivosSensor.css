@@ -1,0 +1,32 @@
+.dispositivos-contenedor {
+    padding: 2rem;
+  }
+  
+  .btn-volver {
+    margin-bottom: 1rem;
+  }
+  
+  .dispositivos-listado {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .dispositivo-card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 10px;
+    width: 200px;
+    background-color: #f9f9f9;
+  }
+  
+  .dispositivo-card h4 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .dispositivo-card button {
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.8rem;
+  }
+  

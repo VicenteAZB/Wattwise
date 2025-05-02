@@ -1,0 +1,42 @@
+/* AlertasProgramadas.css */
+
+.alertas-container {
+    padding: 2rem;
+  }
+  
+  .volver-btn {
+    margin-top: 1rem;
+  }
+  
+  .alerta-item {
+    margin-bottom: 0.5rem;
+  }
+  
+  .editar-btn {
+    margin-left: 1rem;
+  }
+  
+  .eliminar-btn {
+    margin-left: 0.5rem;
+    color: red;
+  }
+  
+  .sin-alertas {
+    color: gray;
+  }
+  
+  .error-text {
+    color: red;
+  }
+  
+  .alerta-form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .valor-input {
+    width: 100px;
+  }
+  

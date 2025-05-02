@@ -1,0 +1,39 @@
+.perfil-cargando {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .perfil-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+  
+  .perfil-card {
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    background-color: #fdfdfd;
+  }
+  
+  .perfil-card h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .perfil-logout-btn {
+    margin-top: 2rem;
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .perfil-logout-btn:hover {
+    background-color: #c0392b;
+  }
+  

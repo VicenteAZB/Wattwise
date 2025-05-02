@@ -1,13 +1,13 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Login from './pages/Login';
-import Oficinas from './pages/Oficinas';
-import OficinaDetail from './pages/OficinaDetail';
-import SeleccionarGrafico from './pages/SeleccionarGrafico';
-import DatosHistoricos from './pages/DatosHistoricos';
-import DispositivosSensor from './pages/DispositivosSensor';
-import AlertasProgramadas from './pages/AlertasProgramadas';
-import Perfil from './pages/Perfil';
+import Navbar from './components/navbar/Navbar';
+import Login from './pages/login/Login';
+import Oficinas from './pages/oficinas/Oficinas';
+import OficinaDetail from './pages/oficinadetail/OficinaDetail';
+import SeleccionarGrafico from './pages/seleccionargrafico/SeleccionarGrafico';
+import DatosHistoricos from './pages/datoshistoricos/DatosHistoricos';
+import DispositivosSensor from './pages/dispositivossensor/DispositivosSensor';
+import AlertasProgramadas from './pages/alertasprogramadas/AlertasProgramadas';
+import Perfil from './pages/perfil/Perfil';
 import ProtectedRoute from './components/ProtectedRoute'; 
 
 function App() {

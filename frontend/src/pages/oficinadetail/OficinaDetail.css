@@ -1,0 +1,31 @@
+.container {
+    padding: 2rem;
+  }
+  
+  .btn-volver {
+    margin-top: 1rem;
+  }
+  
+  .sensores-grid {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .sensor-card {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f9f9f9;
+    cursor: pointer;
+    text-align: center;
+    width: 28%;
+    transition: transform 0.2s, background-color 0.3s;
+  }
+  
+  .sensor-card:hover {
+    transform: scale(1.03);
+    background-color: #e9f5ff;
+  }
+  
