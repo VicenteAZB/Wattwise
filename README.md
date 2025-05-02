@@ -37,7 +37,6 @@ Este repositorio contiene el **PMN (Prototipo Mínimo Navegable)** y el **PMV (P
 
 ## Enlaces
 
-- 🔗 **Repositorio en GitHub**: [https://github.com/VicenteAZB/Wattwise](https://github.com/VicenteAZB/Wattwise)  
 - 🚀 **App desplegada en Render**: [https://wattwise-f3da.onrender.com/](https://wattwise-f3da.onrender.com/)
 
 ---
