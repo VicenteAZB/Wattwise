@@ -22,7 +22,10 @@ Este repositorio contiene el **PMN (Prototipo Mínimo Navegable)** y el **PMV (P
 - **React Calendar** y **React Time Picker**: Selección de fechas y horas.
 - **Recharts**: Representación de datos con gráficos.
 - **Flask**: Backend que gestiona los datos simulados.
+- **MongoDB**: Base de datos NoSQL utilizada para almacenar los datos de sensores y configuraciones.
+- **Render**: Plataforma de despliegue de aplicaciones que aloja el backend y los servicios web del proyecto.
 - **UptimeRobot**: Para mantener activo el backend en Render.
+
 
 ---
 
