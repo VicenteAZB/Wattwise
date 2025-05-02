@@ -93,5 +93,10 @@ def start_simulador():
 # Ejecutar el simulador en un hilo aparte
 threading.Thread(target=start_simulador, daemon=True).start()
 
+# Ruta para comprobar que el servicio está activo
+@app.route("/")
+def home():
+    return "Simulador activo", 200
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=os.getenv("PORT", 5000))
