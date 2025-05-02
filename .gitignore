@@ -1,4 +1,6 @@
 backend/.env
 backend/venv
+sensores/.env
+sensores/venv
 frontend/node_modules/
 
