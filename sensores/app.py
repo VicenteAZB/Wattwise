@@ -93,6 +93,5 @@ def start_simulador():
 # Ejecutar el simulador en un hilo aparte
 threading.Thread(target=start_simulador, daemon=True).start()
 
-@app.route('/')
-def home():
-    return "🚀 Simulador de sensores ejecutándose en segundo plano."
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=os.getenv("PORT", 5000))
