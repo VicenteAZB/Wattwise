@@ -18,7 +18,7 @@ USUARIOS = os.getenv("USUARIOS")
 OFICINAS = os.getenv("OFICINAS")
 SENSORES = os.getenv("SENSORES")
 # Conectar a MongoDB
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGO_URI, ssl=True)
 db = client[DB_NAME]
 usuarios_col = db[USUARIOS]
 oficinas_col = db[OFICINAS]  # colección de oficinas
