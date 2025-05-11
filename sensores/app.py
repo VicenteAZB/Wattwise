@@ -10,6 +10,9 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 
+# Diccionario global para mantener valores actuales por sensor
+valores_actuales = {}
+
 def start_simulador():
     load_dotenv()
 
@@ -36,13 +39,73 @@ def start_simulador():
     client.connect(BROKER, PORT, 60)
     client.loop_start()
 
-    def simular_valor(sensor_tipo):
+    # Simulación realista de valores
+    def simular_valor(sensor_id, sensor_tipo):
+        if sensor_id not in valores_actuales:
+            if sensor_tipo == "Temperatura":
+                valores_actuales[sensor_id] = round(random.uniform(22.0, 26.0), 2)
+            elif sensor_tipo == "Humedad":
+                valores_actuales[sensor_id] = round(random.uniform(45.0, 55.0), 1)
+            elif sensor_tipo == "Corriente":
+                valores_actuales[sensor_id] = round(random.uniform(1.0, 1.5), 2)
+            else:
+                valores_actuales[sensor_id] = round(random.uniform(0.0, 100.0), 2)
+
         if sensor_tipo == "Temperatura":
-            return round(random.uniform(18.0, 30.0), 2)
+            delta = random.uniform(-0.2, 0.2)
         elif sensor_tipo == "Humedad":
-            return round(random.uniform(30.0, 70.0), 1)
+            delta = random.uniform(-0.5, 0.5)
         elif sensor_tipo == "Corriente":
-            return round(random.uniform(0.2, 2.5), 2)
+            delta = random.uniform(-0.1, 0.1)
+        else:
+            delta = random.uniform(-1, 1)
+
+        nuevo_valor = valores_actuales[sensor_id] + delta
+
+        if sensor_tipo == "Temperatura":
+            nuevo_valor = min(max(nuevo_valor, 18.0), 30.0)
+        elif sensor_tipo == "Humedad":
+            nuevo_valor = min(max(nuevo_valor, 30.0), 70.0)
+        elif sensor_tipo == "Corriente":
+            nuevo_valor = min(max(nuevo_valor, 0.2), 2.5)
+        else:
+            nuevo_valor = min(max(nuevo_valor, 0.0), 100.0)
+
+        valores_actuales[sensor_id] = round(nuevo_valor, 2 if sensor_tipo != "Humedad" else 1)
+        return valores_actuales[sensor_id]
+
+    def evaluar_alertas(sensor, valor_actual):
+        alertas = sensor.get("alertas", [])
+        dispositivos = sensor.get("dispositivos", [])
+        actualizados = False
+
+        for alerta in alertas:
+            operador = alerta["operador"]
+            valor_ref = alerta["valorReferencia"]
+            accion = alerta["accion"]
+            dispositivo_nombre = alerta["dispositivo"]
+
+            if (
+                (operador == ">" and valor_actual > valor_ref) or
+                (operador == "<" and valor_actual < valor_ref) or
+                (operador == ">=" and valor_actual >= valor_ref) or
+                (operador == "<=" and valor_actual <= valor_ref) or
+                (operador == "=" and valor_actual == valor_ref)
+            ):
+                print(f"⚠️ Alerta activada: {accion} {dispositivo_nombre}")
+                for d in dispositivos:
+                    if d["nombre"] == dispositivo_nombre:
+                        nuevo_estado = 1 if accion.lower() == "encender" else 0
+                        if d["estado"] != nuevo_estado:
+                            d["estado"] = nuevo_estado
+                            actualizados = True
+
+        if actualizados:
+            coleccion.update_one(
+                {"_id": sensor["_id"]},
+                {"$set": {"dispositivos": dispositivos}}
+            )
+            print(f"🔄 Estado de dispositivos actualizado en MongoDB para {sensor.get('nombre_sensor')}")
 
     ultimo_guardado = time.time()
 
@@ -51,12 +114,13 @@ def start_simulador():
         ahora = time.time()
 
         for sensor in sensores:
+            sensor_id = str(sensor.get("_id"))
             oficina = sensor.get("oficina", "oficina_desconocida")
             nombre = sensor.get("nombre_sensor", "sensor_desconocido")
             unidad = sensor.get("unidad_medida", "")
             tipo_sensor = sensor.get("tipo", "corriente")
             tiempo_real = sensor.get("tiempo_real", "tarjeta")
-            valor_simulado = simular_valor(tipo_sensor)
+            valor_simulado = simular_valor(sensor_id, tipo_sensor)
 
             mensaje = {
                 "oficina": oficina,
@@ -71,6 +135,8 @@ def start_simulador():
             topic = f"wattwise/test/{oficina}/{nombre}"
             client.publish(topic, json.dumps(mensaje))
             print(f"📤 Enviado a topic {topic}: {mensaje}")
+
+            evaluar_alertas(sensor, valor_simulado)
 
             if ahora - ultimo_guardado >= 3600:
                 mensaje_mongo = {
@@ -88,15 +154,13 @@ def start_simulador():
         if ahora - ultimo_guardado >= 3600:
             ultimo_guardado = ahora
 
-        time.sleep(1)
+        time.sleep(2)
 
-# Ejecutar el simulador en un hilo aparte
 threading.Thread(target=start_simulador, daemon=True).start()
 
-# Ruta para comprobar que el servicio está activo
 @app.route("/")
 def home():
     return "Simulador activo", 200
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)))

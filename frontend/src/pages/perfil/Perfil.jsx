@@ -59,9 +59,21 @@ export default function Perfil() {
     <div className="perfil-container">
       <div className="perfil-card">
         <h2>👤 Perfil de {usuario.nombre}</h2>
+        <p><strong>Nombre:</strong> {usuario.nombre}</p>
         <p><strong>Nombre de usuario:</strong> {usuario.usuario}</p>
         <p><strong>Rol:</strong> {usuario.tipo_usuario || 'Usuario'}</p>
-        <p><strong>Oficinas disponibles:</strong> {usuario.oficinas && usuario.oficinas.length > 0 ? usuario.oficinas.join(', ') : 'No especificado'}</p>
+        <div>
+          <strong>Oficinas disponibles:</strong>
+          {usuario.oficinas && usuario.oficinas.length > 0 ? (
+            <ul>
+              {usuario.oficinas.map((oficina, idx) => (
+                <li key={idx}>{oficina}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No especificado</p>
+          )}
+        </div>
 
         <button
           className="perfil-logout-btn"

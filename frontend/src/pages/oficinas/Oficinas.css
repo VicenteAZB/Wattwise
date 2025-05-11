@@ -42,4 +42,9 @@
     color: #666;
     font-size: 0.9rem;
   }
+
+  .oficinas-cargando {
+    padding: 2rem;
+    text-align: center;
+  }
   

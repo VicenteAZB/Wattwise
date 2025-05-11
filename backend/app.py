@@ -187,6 +187,88 @@ def obtener_datos_historicos():
         "tipoGrafico": tipo_grafico
     })
 
+@app.route('/oficina/<oficina>/sensor/<nombre_sensor>/obtenerdispositivos', methods=['GET'])
+@verificar_token
+def obtener_dispositivos(oficina, nombre_sensor):
+    sensor = sensores_col.find_one({'oficina': oficina, 'nombre_sensor': nombre_sensor})
+
+    if not sensor:
+        return jsonify({'error': 'Sensor no encontrado'}), 404
+
+    dispositivos = sensor.get('dispositivos', [])
+
+    return jsonify({'dispositivos': dispositivos}), 200
+
+@app.route('/oficina/<oficina>/sensor/<nombre_sensor>/actualizardispositivo', methods=['PUT'])
+@verificar_token
+def actualizar_dispositivo(oficina, nombre_sensor):
+    datos = request.json
+    nombre_dispositivo = datos.get('nombre_dispositivo')
+    nuevo_estado = datos.get('estado')
+
+    if nombre_dispositivo is None or nuevo_estado is None:
+        return jsonify({'error': 'Datos incompletos'}), 400
+
+    sensor = sensores_col.find_one({'oficina': oficina, 'nombre_sensor': nombre_sensor})
+    if not sensor:
+        return jsonify({'error': 'Sensor no encontrado'}), 404
+
+    dispositivos = sensor.get('dispositivos', [])
+    actualizado = False
+
+    for d in dispositivos:
+        if d['nombre'] == nombre_dispositivo:
+            d['estado'] = nuevo_estado
+            actualizado = True
+            break
+
+    if not actualizado:
+        return jsonify({'error': 'Dispositivo no encontrado'}), 404
+
+    sensores_col.update_one(
+        {'_id': sensor['_id']},
+        {'$set': {'dispositivos': dispositivos}}
+    )
+
+    return jsonify({'mensaje': 'Estado del dispositivo actualizado'}), 200
+
+@app.route('/oficina/<oficina>/sensor/<nombre_sensor>/alertas', methods=['PATCH'])
+@verificar_token
+def agregar_editar_alertas_sensor(oficina, nombre_sensor):
+    data = request.get_json()
+
+    if not isinstance(data, list):
+        return jsonify({"error": "Se espera una lista de alertas"}), 400
+
+    result = sensores_col.update_one(
+        {'oficina': oficina, 'nombre_sensor': nombre_sensor},
+        {'$set': {'alertas': data}}
+    )
+
+    if result.matched_count == 0:
+        return jsonify({'error': 'Sensor no encontrado'}), 404
+
+    return jsonify({'mensaje': 'Alertas actualizadas correctamente'}), 200
+
+@app.route('/oficina/<oficina>/sensor/<nombre_sensor>/alertas', methods=['GET'])
+@verificar_token
+def obtener_alertas_sensor(oficina, nombre_sensor):
+    sensor = sensores_col.find_one({'oficina': oficina, 'nombre_sensor': nombre_sensor})
+
+    if not sensor:
+        return jsonify({'error': 'Sensor no encontrado'}), 404
+
+    resultado = {
+        'tipo': sensor.get('tipo'),
+        'unidad_medida': sensor.get('unidad_medida'),
+        'dispositivos': sensor.get('dispositivos', []),
+        'alertas': sensor.get('alertas', [])
+    }
+
+    return jsonify(resultado), 200
+
+
+
 @app.route('/crearusuario', methods=['POST'])
 def crear_usuario():
     data = request.get_json()
@@ -255,6 +337,7 @@ def crear_sensor():
     tipo = data.get('tipo')
     unidad = data.get('unidad_medida')
     oficina = data.get('oficina')
+    dispositivos = data.get('dispositivos')
 
     # 1. Validación de campos obligatorios
     if not all([nombre, tipo, unidad, oficina]):
@@ -281,6 +364,7 @@ def crear_sensor():
         'tiempo_real': 'tarjeta',
         'historico': 'tabla',
         'mediciones': [],  
+        'dispositivos': dispositivos,
         'alertas': []      
     }
 
@@ -288,7 +372,7 @@ def crear_sensor():
     result = sensores_col.insert_one(sensor_doc)
 
     # 6. Leer de vuelta, convertir _id a string y limpiar campos
-    sensor_db = sensores_col.find_one({'_id': result.inserted_id}, {'_id': 1, 'nombre_sensor':1, 'tipo':1, 'unidad_medida':1, 'oficina':1, 'tiempo_real':1, 'historico':1,'mediciones':1, 'alertas':1})
+    sensor_db = sensores_col.find_one({'_id': result.inserted_id}, {'_id': 1, 'nombre_sensor':1, 'tipo':1, 'unidad_medida':1, 'oficina':1, 'tiempo_real':1, 'historico':1,'mediciones':1, 'dispositivos':1, 'alertas':1})
     sensor_db['id'] = str(sensor_db['_id'])
     del sensor_db['_id']
 

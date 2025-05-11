@@ -1,12 +1,20 @@
+body {
+  margin: 0;
+  padding: 0;
+}
 .navbar {
-    background-color: #007BFF;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+  background-color: #007BFF;
+  padding: 1rem; /* Ajustado para evitar espacios laterales */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100vw;
+  margin: 0;
+  box-sizing: border-box;
+}
+
   
   .navbar-logo {
     font-size: 1.2rem;

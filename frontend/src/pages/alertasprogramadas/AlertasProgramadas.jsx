@@ -1,129 +1,103 @@
-// AlertasProgramadas.jsx
+// src/components/AlertasProgramadas.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './AlertasProgramadas.css';
+import { cargarDatos, guardarAlertas } from './AlertasProgramadasService';
 
-const datosOficinas = [
-  {
-    id: '1',
-    nombre: 'Oficina 1',
-    sensores: [
-      { tipo: 'Energía', unidad: 'kWh' },
-      { tipo: 'Temperatura', unidad: '°C' },
-    ]
-  },
-  {
-    id: '2',
-    nombre: 'Oficina 2',
-    sensores: [
-      { tipo: 'Energía', unidad: 'kWh' },
-      { tipo: 'Humedad', unidad: '%' },
-    ]
-  },
-  {
-    id: '3',
-    nombre: 'Oficina 3',
-    sensores: [
-      { tipo: 'Temperatura', unidad: '°C' },
-      { tipo: 'Humedad', unidad: '%' },
-    ]
-  },
-];
-
-const dispositivosPorTipo = {
-  'Temperatura': ['Aire Acondicionado', 'Ventilador'],
-  'Energía': ['UPS', 'Panel Solar'],
-  'Humedad': ['Extractor', 'Calefactor']
-};
-
-const operadoresLogicos = ['>', '<', '>=', '<=', '=='];
-
-// Funciones internas de servicios (no separadas)
-function cargarAlertas(oficinaId, tipo) {
-  const guardadas = localStorage.getItem(`${oficinaId}-${tipo}`);
-  return guardadas ? JSON.parse(guardadas) : [];
-}
-
-function guardarAlertas(oficinaId, tipo, alertas) {
-  localStorage.setItem(`${oficinaId}-${tipo}`, JSON.stringify(alertas));
-}
+const operadoresLogicos = ['>', '<', '>=', '<=', '='];
 
 export default function AlertasProgramadas() {
   const { oficinaId, tipo } = useParams();
   const navigate = useNavigate();
 
-  const oficina = datosOficinas.find(o => o.id === oficinaId);
-  const unidad = oficina?.sensores.find(s => s.tipo === tipo)?.unidad || '';
-
+  const [tipoSensor, setTipoSensor] = useState('');
+  const [unidadMedida, setUnidadMedida] = useState('');
+  const [dispositivos, setDispositivos] = useState([]);
   const [alertas, setAlertas] = useState([]);
+
   const [accion, setAccion] = useState('Encender');
-  const [dispositivo, setDispositivo] = useState(dispositivosPorTipo[tipo]?.[0] || '');
+  const [dispositivo, setDispositivo] = useState(null);
   const [operador, setOperador] = useState('>');
   const [valorReferencia, setValorReferencia] = useState('');
   const [modoEdicion, setModoEdicion] = useState(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    setAlertas(cargarAlertas(oficinaId, tipo));
+    async function fetchData() {
+      const data = await cargarDatos(oficinaId, tipo);
+      if (data) {
+        setTipoSensor(data.tipo);
+        setUnidadMedida(data.unidad_medida);
+        setDispositivos(data.dispositivos || []);
+        setAlertas(data.alertas || []);
+      }
+    }
+    fetchData();
   }, [oficinaId, tipo]);
 
-  useEffect(() => {
-    if (alertas.length > 0) {
-      guardarAlertas(oficinaId, tipo, alertas);
-    }
-  }, [alertas, oficinaId, tipo]);
+  function editarAlerta(index) {
+    const alerta = alertas[index];
+    setAccion(alerta.accion);
+    setOperador(alerta.operador);
+    setValorReferencia(alerta.valorReferencia);
+    setDispositivo(dispositivos.find(d => d.nombre === alerta.dispositivo));
+    setModoEdicion(index);
+  }
 
-  const agregarOEditarAlerta = () => {
-    if (!accion || !dispositivo || !operador || !valorReferencia) {
+  function eliminarAlerta(index) {
+    const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta alerta?");
+    if (confirmacion) {
+      const nuevasAlertas = [...alertas];
+      nuevasAlertas.splice(index, 1);
+      setAlertas(nuevasAlertas);
+      guardarAlertas(oficinaId, tipo, nuevasAlertas);
+    }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setError('');
+
+    if (!dispositivo || valorReferencia === '') {
       setError('Todos los campos son obligatorios');
       return;
     }
 
-    setError('');
+    const nombreDispositivo = dispositivo.nombre || 'dispositivo';
+    const text = modoEdicion == null ? "agregar" : "editar";
+
+    const confirmacion = window.confirm(
+      `¿Estás seguro de que deseas ${text} esta alerta?`
+    );
+
+    if (!confirmacion) return;
+
     const nuevaAlerta = {
-      condicion: `${tipo} ${operador} ${valorReferencia} ${unidad}`,
-      accion: `${accion} ${dispositivo}`,
-      dispositivo,
-      tipoAccion: accion,
+      accion,
+      dispositivo: nombreDispositivo,
       operador,
-      valorReferencia
+      valorReferencia: parseFloat(valorReferencia),
     };
 
-    let nuevasAlertas;
-
+    const nuevasAlertas = [...alertas];
     if (modoEdicion !== null) {
-      nuevasAlertas = [...alertas];
       nuevasAlertas[modoEdicion] = nuevaAlerta;
-      setModoEdicion(null);
     } else {
-      if (!window.confirm('¿Estás seguro de que deseas agregar esta alerta?')) return;
-      nuevasAlertas = [...alertas, nuevaAlerta];
+      nuevasAlertas.push(nuevaAlerta);
     }
 
     setAlertas(nuevasAlertas);
     guardarAlertas(oficinaId, tipo, nuevasAlertas);
+    resetFormulario();
+  }
 
-    setAccion('Encender');
-    setDispositivo(dispositivosPorTipo[tipo]?.[0] || '');
-    setOperador('>');
+  function resetFormulario() {
+    setModoEdicion(null);
     setValorReferencia('');
-  };
-
-  const eliminarAlerta = (idx) => {
-    if (!window.confirm('¿Estás seguro de que quieres eliminar esta alerta?')) return;
-    const nuevasAlertas = alertas.filter((_, i) => i !== idx);
-    setAlertas(nuevasAlertas);
-    guardarAlertas(oficinaId, tipo, nuevasAlertas);
-  };
-
-  const editarAlerta = (idx) => {
-    const alerta = alertas[idx];
-    setAccion(alerta.tipoAccion);
-    setDispositivo(alerta.dispositivo);
-    setOperador(alerta.operador);
-    setValorReferencia(alerta.valorReferencia);
-    setModoEdicion(idx);
-  };
+    setDispositivo(null);
+    setAccion('Encender');
+    setOperador('>');
+  }
 
   return (
     <div className="alertas-container">
@@ -131,67 +105,71 @@ export default function AlertasProgramadas() {
         <button onClick={() => navigate(-1)}>🔙 Volver</button>
       </div>
       <h2>📢 Alertas Programadas</h2>
-      {oficina ? (
-        <>
-          <h3>🏢 Oficina: {oficina.nombre}</h3>
-          <h4>🔧 Sensor: {tipo} ({unidad})</h4>
 
-          <ul>
-            {alertas.length > 0 ? (
-              alertas.map((alerta, idx) => (
-                <li key={idx} className="alerta-item">
-                  <strong>{alerta.accion}</strong> si <strong>{alerta.condicion}</strong>
-                  <button onClick={() => editarAlerta(idx)} className="editar-btn">✏️ Editar</button>
-                  <button onClick={() => eliminarAlerta(idx)} className="eliminar-btn">🗑️ Eliminar</button>
-                </li>
-              ))
-            ) : (
-              <p className="sin-alertas">No hay alertas programadas para este sensor.</p>
-            )}
-          </ul>
+      <h3>🏢 Oficina: {oficinaId}</h3>
+      <h4>🔧 Sensor: {tipoSensor} ({unidadMedida})</h4>
 
-          <hr />
-          <h4>{modoEdicion !== null ? '✏️ Editar Alerta' : '➕ Nueva Alerta'}</h4>
+      <ul>
+        {alertas.length > 0 ? (
+          alertas.map((alerta, idx) => (
+            <li key={idx} className="alerta-item">
+              <strong>{alerta.accion} {alerta.dispositivo} si {tipoSensor} {alerta.operador} {alerta.valorReferencia}{unidadMedida}</strong>
+              <button onClick={() => editarAlerta(idx)} className="editar-btn">✏️ Editar</button>
+              <button onClick={() => eliminarAlerta(idx)} className="eliminar-btn">🗑️ Eliminar</button>
+            </li>
+          ))
+        ) : (
+          <p className="sin-alertas">No hay alertas programadas para este sensor.</p>
+        )}
+      </ul>
 
-          {error && <p className="error-text">{error}</p>}
+      <hr />
+      <h4>{modoEdicion !== null ? '✏️ Editar Alerta' : '➕ Nueva Alerta'}</h4>
+      {error && <p className="error-text">{error}</p>}
 
-          <div className="alerta-form">
-            <select value={accion} onChange={(e) => setAccion(e.target.value)} required>
-              <option value="Encender">Encender</option>
-              <option value="Apagar">Apagar</option>
-            </select>
+      <form className="alerta-form" onSubmit={handleSubmit}>
+        <select value={accion} onChange={(e) => setAccion(e.target.value)} required>
+          <option value="Encender">Encender</option>
+          <option value="Apagar">Apagar</option>
+        </select>
 
-            <select value={dispositivo} onChange={(e) => setDispositivo(e.target.value)} required>
-              {dispositivosPorTipo[tipo]?.map((d, idx) => (
-                <option key={idx} value={d}>{d}</option>
-              ))}
-            </select>
+        <select
+          value={dispositivo ? dispositivo.nombre : ''}
+          onChange={(e) => {
+            const selected = dispositivos.find(d => d.nombre === e.target.value);
+            setDispositivo(selected);
+          }}
+          required
+        >
+          <option value="">Selecciona un dispositivo</option>
+          {dispositivos.map((d, idx) => (
+            <option key={idx} value={d.nombre}>{d.nombre}</option>
+          ))}
+        </select>
 
-            <p>{tipo}</p>
+        <select value={operador} onChange={(e) => setOperador(e.target.value)} required>
+          {operadoresLogicos.map((op, idx) => (
+            <option key={idx} value={op}>{op}</option>
+          ))}
+        </select>
 
-            <select value={operador} onChange={(e) => setOperador(e.target.value)} required>
-              {operadoresLogicos.map((op, idx) => (
-                <option key={idx} value={op}>{op}</option>
-              ))}
-            </select>
+        <input
+          type="number"
+          placeholder={`Valor (${unidadMedida})`}
+          value={valorReferencia}
+          onChange={(e) => setValorReferencia(e.target.value)}
+          required
+          className="valor-input"
+        />
 
-            <input
-              type="number"
-              placeholder={`Valor (${unidad})`}
-              value={valorReferencia}
-              onChange={(e) => setValorReferencia(e.target.value)}
-              required
-              className="valor-input"
-            />
+        <button type="submit">
+          {modoEdicion !== null ? '💾 Guardar cambios' : '➕ Agregar'}
+        </button>
 
-            <button onClick={agregarOEditarAlerta}>
-              {modoEdicion !== null ? '💾 Guardar cambios' : '➕ Agregar'}
-            </button>
-          </div>
-        </>
-      ) : (
-        <p>Oficina no encontrada.</p>
-      )}
+        {modoEdicion !== null && (
+          <button type="button" onClick={resetFormulario} className="cancelar-btn">❌ Cancelar</button>
+        )}
+      </form>
     </div>
   );
 }
