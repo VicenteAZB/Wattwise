@@ -10,8 +10,14 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    alert("Para acceder a Oficina de Dirección General y Oficina Administrativa utilice:\nUsuario: gcontreras\nContraseña: 1234\nPara acceder a Oficina de Finanzas utilice:\nUsuario: valvarez\nContraseña: 1234");
-  }, []);
+    const token = localStorage.getItem('token');
+  
+    if (token) {
+      navigate('/oficinas'); // Si ya hay token, redirige al usuario
+    } else {
+      alert("Para acceder a Oficina de Dirección General y Oficina Administrativa utilice:\nUsuario: gcontreras\nContraseña: 1234\nPara acceder a Oficina de Finanzas utilice:\nUsuario: valvarez\nContraseña: 1234");
+    }
+  }, [navigate]);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
