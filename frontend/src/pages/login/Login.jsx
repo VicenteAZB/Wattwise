@@ -10,7 +10,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    alert("Para acceder utilice las siguientes credenciales para acceder a las oficinas 1 y 2:\nUsuario: gcontreras\nContraseña: 1234\nPara acceder a las oficinas 3 y 4 utilice las siguientes credenciales:\nUsuario: juanperez\nContraseña: 1234");
+    alert("Para acceder a Oficina de Dirección General y Oficina Administrativa utilice:\nUsuario: gcontreras\nContraseña: 1234\nPara acceder a Oficina de Finanzas utilice:\nUsuario: valvarez\nContraseña: 1234");
   }, []);
   
   const handleSubmit = async (e) => {
