@@ -8,8 +8,6 @@ export default function SensorModal({ id, sensor, onClose }) {
     <div className="sensor-modal-overlay">
       <div className="sensor-modal-content">
         <h3>{sensor.tipo}</h3>
-        <p><strong>Valor actual:</strong> {sensor.valor} {sensor.unidad}</p>
-
         {/* Opciones del modal */}
         <div className="sensor-modal-options">
           <button 
