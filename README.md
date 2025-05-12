@@ -1,17 +1,17 @@
 # Wattwise – PMN y PMV
 
-Este repositorio contiene el **PMN (Prototipo Mínimo Navegable)** y el **PMV (Producto Mínimo Viable)** del proyecto **Wattwise**, una plataforma diseñada para ayudar a las empresas a **optimizar su consumo de energía** y **monitorear en tiempo real** el uso de recursos eléctricos. El PMN simula la experiencia de usuario, mientras que el PMV ya implementa funciones reales básicas, incluyendo conexión con backend y simulación de sensores.
+Este repositorio contiene el **PMN (Prototipo Mínimo Navegable)** y el **PMV (Prototipo Mínimo Viable)** del proyecto **Wattwise**, una plataforma diseñada para ayudar a las empresas a **optimizar su consumo de energía** y **monitorear en tiempo real** el uso de recursos eléctricos. El PMN simula la experiencia de usuario, mientras que el PMV ya implementa funciones reales básicas, incluyendo conexión con backend, simulación de sensores, datos en tiempo real y automatización de procesos (alertas de los sensores).
 
-> ⚡ **Nota Importante:** Algunos datos son **simulados** con fines demostrativos y no representan datos reales.
 
----
-
-## Características Hasta el Momento
+## Características 
 
 - 🔄 **Interacciones simuladas y reales**: Navegación fluida con datos de sensores simulados en tiempo real.
-- 📈 **Visualización de datos**: Gráficos de consumo por sensor y por oficina.
+- 📈 **Visualización de datos**: Gráficos de consumo por cada sensor de cada oficina.
 - ⚙️ **Simulador de sensores**: Generación periódica de datos que alimentan los gráficos.
-- 🔒 **Autenticación básica** (en el backend): Preparado para controlar el acceso a datos en futuras versiones.
+- 🔒 **Autenticación**: Control de acceso a oficinas dependiendo del usuario logueado.
+- 🔌 **Control y Automatización de Dispositivos**:
+  - Se ha implementado una página donde los usuarios pueden encender y apagar dispositivos manualmente.
+  - Se añadió la funcionalidad de agregar alertas, permitiendo configurar condiciones (como umbrales y comparadores) para automatizar acciones sobre los dispositivos vinculados a cada sensor.
 
 ---
 
@@ -50,3 +50,5 @@ Para clonar el repositorio y comenzar a trabajar localmente:
 
 ```bash
 git clone https://github.com/VicenteAZB/Wattwise.git
+
+
