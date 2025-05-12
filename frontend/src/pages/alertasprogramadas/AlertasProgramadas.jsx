@@ -107,7 +107,7 @@ export default function AlertasProgramadas() {
       <h2>📢 Alertas Programadas</h2>
 
       <h3>🏢 Oficina: {oficinaId}</h3>
-      <h4>🔧 Sensor: {tipoSensor} ({unidadMedida})</h4>
+      <h4>🔧 Sensor: {tipo} ({unidadMedida})</h4>
 
       <ul>
         {alertas.length > 0 ? (
