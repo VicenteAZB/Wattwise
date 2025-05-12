@@ -113,7 +113,7 @@ export default function AlertasProgramadas() {
         {alertas.length > 0 ? (
           alertas.map((alerta, idx) => (
             <li key={idx} className="alerta-item">
-              <strong>{alerta.accion} {alerta.dispositivo} si {tipoSensor} {alerta.operador} {alerta.valorReferencia}{unidadMedida}</strong>
+              <strong>{alerta.accion} {alerta.dispositivo} si {tipoSensor} {alerta.operador} {alerta.valorReferencia} {unidadMedida}</strong>
               <button onClick={() => editarAlerta(idx)} className="editar-btn">✏️ Editar</button>
               <button onClick={() => eliminarAlerta(idx)} className="eliminar-btn">🗑️ Eliminar</button>
             </li>
