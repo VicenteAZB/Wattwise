@@ -20,7 +20,7 @@ def start_simulador():
     DB_NAME = os.getenv("DB_NAME")
     SENSORES = os.getenv("SENSORES")
 
-    BROKER = 'test.mosquitto.org'
+    BROKER = 'broker.hivemq.com'
     PORT = 1883
 
     mongo_client = MongoClient(MONGO_URI)
@@ -31,7 +31,7 @@ def start_simulador():
 
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
-            print("✅ Conectado a test.mosquitto.org")
+            print("✅ Conectado a broker.hivemq.com")
         else:
             print("❌ Error al conectar, código:", rc)
 
@@ -163,4 +163,4 @@ def home():
     return "Simulador activo", 200
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)))
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5001)))
